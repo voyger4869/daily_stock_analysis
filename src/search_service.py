@@ -2505,16 +2505,16 @@ class SearchService:
             self._providers.insert(0, AnspireSearchProvider(anspire_keys))
             logger.info(f"已配置 Anspire Search 搜索，共 {len(anspire_keys)} 个 API Key")
             
-        # 8. 东方财富个股新闻直连（免 Key 兜底，本地补丁；见 src/eastmoney_news_provider.py）
+        # 8. Google News RSS 新闻检索（免 Key 兜底，本地补丁；见 src/googlenews_rss_provider.py）
         try:
-            from src.eastmoney_news_provider import EastMoneyNewsProvider
+            from src.googlenews_rss_provider import GoogleNewsRssProvider
 
-            eastmoney_provider = EastMoneyNewsProvider()
-            if eastmoney_provider.is_available:
-                self._providers.append(eastmoney_provider)
-                logger.info("已配置 东方财富新闻直连 搜索（免 Key 兜底）")
+            googlenews_provider = GoogleNewsRssProvider()
+            if googlenews_provider.is_available:
+                self._providers.append(googlenews_provider)
+                logger.info("已配置 Google News RSS 新闻搜索（免 Key 兜底）")
         except Exception as exc:  # 补丁可选加载，失败不影响主链路
-            logger.warning("东方财富新闻直连 provider 加载失败，已跳过: %s", exc)
+            logger.warning("Google News RSS provider 加载失败，已跳过: %s", exc)
 
         if not self._providers:
             logger.warning("未配置任何搜索能力，新闻搜索功能将不可用")
